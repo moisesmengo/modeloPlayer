@@ -120,7 +120,7 @@
       var player;
       function onYouTubePlayerAPIReady() {
         player = new YT.Player("ytplayer", {
-          videoId: "AbflCS8VkkU",
+          videoId: "vg9uoI3apZ4",
           playerVars: {
             autoplay: 1,
             cc_load_policy: 0,
@@ -136,7 +136,17 @@
             host: "https://www.youtube.com",
             mute: 1,
           },
+          events: {
+            onReady: onPlayerReady,
+            onStateChange: onPlayerStateChange,
+          },
         });
+      }
+
+      function onPlayerReady(event) {
+        event.target.mute();
+        event.target.playVideo();
+        event.target.seekTo(1, true);
       }
 
       function onPlayerStateChange(event) {
