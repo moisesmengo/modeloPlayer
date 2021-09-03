@@ -120,7 +120,7 @@
       var player;
       function onYouTubePlayerAPIReady() {
         player = new YT.Player("ytplayer", {
-          videoId: "vg9uoI3apZ4",
+          videoId: "6lrAR20zVg4",
           playerVars: {
             autoplay: 1,
             cc_load_policy: 0,
@@ -169,22 +169,28 @@
       const play = document.querySelector(".play");
       const playControle = document.querySelector(".play_controle");
 
-      audio.addEventListener("click", () => {
-        player.unMute();
-        player.setVolume(100);
-        volume.style.display = "none";
-        play.style.display = "block";
+      ["touchstart", "click"].forEach((userevent) => {
+        audio.addEventListener(userevent, () => {
+          player.unMute();
+          player.setVolume(100);
+          volume.style.display = "none";
+          play.style.display = "block";
+        });
       });
 
-      play.addEventListener("click", () => {
-        player.pauseVideo();
-        playControle.style.display = "block";
+      ["touchstart", "click"].forEach((userevent) => {
+        play.addEventListener(userevent, () => {
+          player.pauseVideo();
+          playControle.style.display = "block";
+        });
       });
 
-      playControle.addEventListener("click", () => {
-        player.playVideo();
-        playControle.style.display = "none";
-        play.style.display = "block";
+      ["touchstart", "click"].forEach((userevent) => {
+        playControle.addEventListener(userevent, () => {
+          player.playVideo();
+          playControle.style.display = "none";
+          play.style.display = "block";
+        });
       });
     </script>
   </body>
