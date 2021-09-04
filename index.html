@@ -25,173 +25,57 @@
         height: 500px;
         border: 10px solid #000;
         margin-top: 10px;
+        position: relative;
+      }
+
+      .top {
+        height: 20%;
         position: absolute;
-        z-index: -1;
+        top: 0;
+        left: 0;
+        background: transparent;
+        z-index: 100;
+        width: 100%;
+      }
+      .bottom {
+        height: 40%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background: transparent;
+        z-index: 100;
+        width: 100%;
       }
       iframe {
         width: 100%;
         height: 100%;
       }
-      .audio {
-        height: 500px;
-        position: relative;
-        width: 800px;
-      }
-      .audio_ativou {
-        z-index: -10 !important;
-      }
-      .volume {
-        position: absolute;
-        background: rgba(0, 0, 0, 0.864);
-        width: 100%;
-        display: flex;
-        padding: 30px 0;
-      }
-      .volume p {
-        font-size: 40px;
-        color: #fff;
-        text-align: center !important;
-      }
-      .play {
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        background: transparent;
-        width: 100%;
-        display: none;
-      }
-      .play_controle {
-        position: absolute;
-        display: none;
-        top: 50%;
-        left: 50%;
-        transform: translate3d(-50%, -50%, 0);
-        cursor: pointer;
-        padding: 50px;
+
+      @media (max-width: 800px) {
+        .video {
+          width: 300px;
+          height: 220px;
+        }
       }
     </style>
   </head>
   <body>
     <h1>Player com Vuejs</h1>
 
-    <div class="audio">
-      <div class="volume">
-        <img src="img/volume-up.svg" alt="" />
-        <p>Haga clic para activar el sonido</p>
-      </div>
-
-      <div class="play"></div>
-      <div class="play_controle">
-        <svg
-          width="80"
-          height="80"
-          viewBox="0 0 80 80"
-          fill="e20808"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g clip-path="url(#clip0)">
-            <path
-              d="M71.3125 33.5469L16.3125 1.03125C11.8438 -1.60938 5 0.953122 5 7.48437V72.5C5 78.3594 11.3594 81.8906 16.3125 78.9531L71.3125 46.4531C76.2187 43.5625 76.2344 36.4375 71.3125 33.5469V33.5469Z"
-              fill="#E20808"
-            ></path>
-          </g>
-          <defs>
-            <clipPath id="clip0">
-              <rect width="80" height="80" fill="white"></rect>
-            </clipPath>
-          </defs>
-        </svg>
-      </div>
-      <div class="meu_video">
-        <div id="ytplayer" class="video"></div>
-      </div>
+    <div class="video">
+      <div class="top"></div>
+      <iframe
+        width="800"
+        height="480"
+        src="https://www.youtube.com/embed/2YjrgYJ1Ww0?autoplay=1&mute=1&controls=0&disablekb=1&iv_load_policy=3&modestbranding=1&rel=0&showinfo=0"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+      <div class="bottom"></div>
     </div>
 
-    <script>
-      // Load the IFrame Player API code asynchronously.
-      var tag = document.createElement("script");
-      tag.src = "https://www.youtube.com/player_api";
-      var firstScriptTag = document.getElementsByTagName("script")[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-      // Replace the 'ytplayer' element with an <iframe> and
-      // YouTube player after the API code downloads.
-      var player;
-      function onYouTubePlayerAPIReady() {
-        player = new YT.Player("ytplayer", {
-          videoId: "6lrAR20zVg4",
-          playerVars: {
-            autoplay: 1,
-            cc_load_policy: 0,
-            controls: 0,
-            disablekb: 1,
-            loop: 1,
-            fs: 0,
-            playsinline: 1,
-            modestbranding: 1,
-            iv_load_policy: 3,
-            rel: 0,
-            showinfo: 0,
-            host: "https://www.youtube.com",
-            mute: 1,
-          },
-          events: {
-            onReady: onPlayerReady,
-            onStateChange: onPlayerStateChange,
-          },
-        });
-      }
-
-      function onPlayerReady(event) {
-        event.target.mute();
-        event.target.playVideo();
-        event.target.seekTo(1, true);
-      }
-
-      function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING && !done) {
-          //      setTimeout(stopVideo, 6000);
-          done = true;
-        }
-        if (event.data == YT.PlayerState.ENDED && done) {
-          player.playVideo();
-        }
-        if (event.data == YT.PlayerState.PAUSED && done) {
-          $(".video-overlay-alt").show();
-          player.setVolume(100);
-        }
-        //event.target.setVolume(0);
-      }
-
-      const audio = document.querySelector(".audio");
-      const volume = document.querySelector(".volume");
-      const play = document.querySelector(".play");
-      const playControle = document.querySelector(".play_controle");
-
-      ["touchstart", "click"].forEach((userevent) => {
-        audio.addEventListener(userevent, () => {
-          player.unMute();
-          player.setVolume(100);
-          volume.style.display = "none";
-          play.style.display = "block";
-        });
-      });
-
-      ["touchstart", "click"].forEach((userevent) => {
-        play.addEventListener(userevent, () => {
-          player.pauseVideo();
-          playControle.style.display = "block";
-        });
-      });
-
-      ["touchstart", "click"].forEach((userevent) => {
-        playControle.addEventListener(userevent, () => {
-          player.playVideo();
-          playControle.style.display = "none";
-          play.style.display = "block";
-        });
-      });
-    </script>
+    <script></script>
   </body>
 </html>
