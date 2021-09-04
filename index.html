@@ -71,7 +71,7 @@
       @media (max-width: 800px) {
         .video {
           width: 300px;
-          height: 250px;
+          height: 300px;
         }
       }
     </style>
@@ -153,9 +153,7 @@
 
       volume.addEventListener("click", () => {
         player.unMute();
-        player.setVolume(100);
         volume.style.display = "none";
-        player.playVideo();
       });
     </script>
   </body>
