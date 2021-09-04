@@ -27,35 +27,45 @@
         margin-top: 10px;
         position: relative;
       }
-
-      .top {
-        height: 20%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        background: transparent;
-        z-index: 100;
-        width: 100%;
-      }
-      .bottom {
-        height: 40%;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        background: transparent;
-        z-index: 100;
-        width: 100%;
-      }
       iframe {
         width: 100%;
         height: 100%;
       }
-
-      @media (max-width: 800px) {
-        .video {
-          width: 300px;
-          height: 220px;
-        }
+      .top,
+      .bottom {
+        position: absolute;
+        top: 0;
+        height: 20%;
+        width: 100%;
+        left: 0;
+        z-index: 100;
+        background: transparent;
+      }
+      .bottom {
+        bottom: 0;
+        background: transparent;
+        width: 100%;
+        height: 40%;
+        top: initial;
+      }
+      .volume {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+      }
+      .volume p {
+        font-size: 24px;
+        font-weight: bold;
+        color: #fff;
+        background: #000;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
       }
     </style>
   </head>
@@ -63,19 +73,103 @@
     <h1>Player com Vuejs</h1>
 
     <div class="video">
-      <div class="top"></div>
-      <iframe
-        width="800"
-        height="480"
-        src="https://www.youtube.com/embed/2YjrgYJ1Ww0?autoplay=1&mute=1&controls=0&disablekb=1&iv_load_policy=3&modestbranding=1&rel=0&showinfo=0"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-      ></iframe>
+      <div class="top">
+        <div class="volume">
+          <img src="img/volume-up.svg" alt="" />
+          <p>Haga clic para activar el sonido</p>
+        </div>
+      </div>
+
+      <div id="ytplayer"></div>
+
       <div class="bottom"></div>
     </div>
 
-    <script></script>
+    <script>
+      // Load the IFrame Player API code asynchronously.
+      var tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/player_api";
+      var firstScriptTag = document.getElementsByTagName("script")[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // Replace the 'ytplayer' element with an <iframe> and
+      // YouTube player after the API code downloads.
+      var player;
+      function onYouTubePlayerAPIReady() {
+        player = new YT.Player("ytplayer", {
+          videoId: "6lrAR20zVg4",
+          playerVars: {
+            autoplay: 1,
+            cc_load_policy: 0,
+            controls: 0,
+            disablekb: 1,
+            loop: 1,
+            fs: 0,
+            playsinline: 1,
+            modestbranding: 1,
+            iv_load_policy: 3,
+            enablejsapi: 1,
+            rel: 0,
+            showinfo: 0,
+            host: "https://www.youtube.com",
+            mute: 1,
+          },
+          events: {
+            onReady: onPlayerReady,
+            onStateChange: onPlayerStateChange,
+          },
+        });
+      }
+
+      function onPlayerReady(event) {
+        event.target.mute();
+        event.target.playVideo();
+        event.target.seekTo(1, true);
+      }
+
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          //      setTimeout(stopVideo, 6000);
+          done = true;
+        }
+        if (event.data == YT.PlayerState.ENDED && done) {
+          player.playVideo();
+        }
+        if (event.data == YT.PlayerState.PAUSED && done) {
+          $(".video-overlay-alt").show();
+          player.setVolume(100);
+        }
+        //event.target.setVolume(0);
+      }
+
+      const audio = document.querySelector(".audio");
+      const volume = document.querySelector(".volume");
+      const play = document.querySelector(".play");
+      const playControle = document.querySelector(".play_controle");
+
+      ["touchstart", "click"].forEach((userevent) => {
+        audio.addEventListener(userevent, () => {
+          player.unMute();
+          player.setVolume(100);
+          volume.style.display = "none";
+          play.style.display = "block";
+        });
+      });
+
+      ["touchstart", "click"].forEach((userevent) => {
+        play.addEventListener(userevent, () => {
+          player.pauseVideo();
+          playControle.style.display = "block";
+        });
+      });
+
+      ["touchstart", "click"].forEach((userevent) => {
+        playControle.addEventListener(userevent, () => {
+          player.playVideo();
+          playControle.style.display = "none";
+          play.style.display = "block";
+        });
+      });
+    </script>
   </body>
 </html>
