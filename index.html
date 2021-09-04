@@ -45,7 +45,7 @@
         bottom: 0;
         background: transparent;
         width: 100%;
-        height: 30%;
+        height: 150px;
         top: initial;
       }
       .volume {
@@ -70,8 +70,12 @@
 
       @media (max-width: 800px) {
         .video {
-          width: 300px;
+          width: 330px;
           height: 300px;
+        }
+        .bottom {
+          background: #000;
+          height: 60px;
         }
       }
     </style>
@@ -135,17 +139,10 @@
       }
 
       function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING && !done) {
-          //      setTimeout(stopVideo, 6000);
-          done = true;
-        }
         if (event.data == YT.PlayerState.ENDED && done) {
           player.playVideo();
         }
-        if (event.data == YT.PlayerState.PAUSED && done) {
-          $(".video-overlay-alt").show();
-          player.setVolume(100);
-        }
+
         //event.target.setVolume(0);
       }
 
