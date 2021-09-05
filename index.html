@@ -81,7 +81,7 @@
     </style>
   </head>
   <body>
-    <h1>Player com Vuejs</h1>
+    <h1>Player coisado</h1>
 
     <div class="video">
       <div class="top">
@@ -156,6 +156,10 @@
 
       bt.addEventListener("click", () => {
         player.playVideo();
+
+        bt.addEventListener("click", () => {
+          player.pauseVideo();
+        });
       });
     </script>
   </body>
