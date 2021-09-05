@@ -81,7 +81,7 @@
     </style>
   </head>
   <body>
-    <h1>Player coisado</h1>
+    <h1>Player</h1>
 
     <div class="video">
       <div class="top">
@@ -152,6 +152,7 @@
       volume.addEventListener("click", () => {
         player.unMute();
         volume.style.display = "none";
+        player.playVideo();
       });
 
       bt.addEventListener("click", () => {
