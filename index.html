@@ -147,10 +147,15 @@
       }
 
       const volume = document.querySelector(".volume");
+      const bt = document.querySelector(".bottom");
 
       volume.addEventListener("click", () => {
         player.unMute();
         volume.style.display = "none";
+      });
+
+      bt.addEventListener("click", () => {
+        player.playVideo();
       });
     </script>
   </body>
